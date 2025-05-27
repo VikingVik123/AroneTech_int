@@ -10,7 +10,7 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/")
 def index():
     """Render the home page."""
-    return jsonify({"Welcome to the Basic Flask App!"})
+    return ("Welcome to the Basic Flask App!")
 
 
 @auth_bp.route("/register", methods=["GET", "POST"])
