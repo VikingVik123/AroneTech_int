@@ -17,3 +17,8 @@ This is a basic web app built with Flask, it handles user registeration and logi
     DATABASE_URL=postgresql://postgres:password@localhost:port/your_db_name
     SECRET_KEY="your secret key"
 9. on the project root dir run "gunicorn --workers 4 --bind 0.0.0.0:5000 main:app"
+
+## Routes
+1. /register
+2. /login
+3. /dashboard

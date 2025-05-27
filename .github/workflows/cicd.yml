@@ -30,19 +30,20 @@ jobs:
         run: |
           pytest tests/
 
-      - name: Deploy to Ubuntu server via SSH
-        if: success()
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: 3.86.205.147
-          username: ubuntu
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /home/ubuntu/AroneTech_int
-            git pull origin main
-            if [ -z "$VIRTUAL_ENV" ]; then
-                source env/bin/activate
-            else
-                echo "Virtual environment already active"
-            fi
-            gunicorn --workers 4 --bind 0.0.0.0:5000 main:app
+#      - name: Deploy to Ubuntu server via SSH
+#        if: success()
+#        uses: appleboy/ssh-action@v0.1.7
+#        with:
+#          host: 3.86.205.147
+#          username: ubuntu
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          script: |
+#            cd /home/ubuntu/AroneTech_int
+#            git pull origin main
+#            if [ -z "$VIRTUAL_ENV" ]; then
+#                source env/bin/activate
+#            else
+#                echo "Virtual environment already active"
+#            fi
+#
+#            gunicorn --workers 4 --bind 0.0.0.0:5000 main:app --access-logfile - --error-logfile - --log-level debug
