@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+
+<h2>Register</h2>
+<form method="POST">
+    <input class="form-control mb-2" name="username" placeholder="Username">
+    <input class="form-control mb-2" name="email" type="email" placeholder="Email">
+    <input class="form-control mb-2" name="password" type="password" placeholder="Password">
+    <button class="btn btn-primary" type="submit">Register</button>
+</form>
+<p class="mt-3">Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('#registerForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = form.username.value.trim();
+        const email = form.email.value.trim();
+        const password = form.password.value.trim();
+
+        let errors = [];
+
+        if (!email.includes('@')) errors.push('Valid email is required.');
+        if (password.length < 6) errors.push('Password must be at least 6 characters.');
+
+        if (errors.length > 0) {
+            showErrors(errors);
+            return;
+        }
+
+        try {
+            const formData = new FormData(form);
+            const res = await fetch('/register', { method: 'POST', body: formData });
+            const text = await res.text();
+            if (res.redirected) {
+                window.location.href = res.url;
+            } else {
+                document.body.innerHTML = text;
+            }
+        } catch (err) {
+            console.error('AJAX error:', err);
+        }
+    });
+
+    function showErrors(errors) {
+        const alertBox = document.querySelector('#form-errors');
+        alertBox.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+        alertBox.style.display = 'block';
+    }
+});
+</script>
+
+{% endblock %}

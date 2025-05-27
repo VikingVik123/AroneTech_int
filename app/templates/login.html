@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<h2>Login</h2>
+<form id="loginForm">
+    <input class="form-control mb-2" name="email" type="email" placeholder="Email" required>
+    <input class="form-control mb-2" name="password" type="password" placeholder="Password" required>
+    <button class="btn btn-primary" type="submit">Login</button>
+</form>
+<ul id="form-errors" class="alert alert-danger" style="display:none;"></ul>
+<p class="mt-3">Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('#loginForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = form.email.value.trim();
+        const password = form.password.value.trim();
+
+        let errors = [];
+
+        if (!email.includes('@')) errors.push('Valid email is required.');
+        if (password.length < 6) errors.push('Password must be at least 6 characters.');
+
+        if (errors.length > 0) {
+            showErrors(errors);
+            return;
+        }
+
+        try {
+            const formData = new FormData(form);
+            const res = await fetch('/login', {
+                method: 'POST',
+                body: formData
+            });
+            const text = await res.text();
+            if (res.redirected) {
+                window.location.href = res.url;
+            } else {
+                document.body.innerHTML = text;
+            }
+        } catch (err) {
+            console.error('AJAX error:', err);
+        }
+    });
+
+    function showErrors(errors) {
+        const alertBox = document.querySelector('#form-errors');
+        alertBox.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+        alertBox.style.display = 'block';
+    }
+});
+</script>
+{% endblock %}
