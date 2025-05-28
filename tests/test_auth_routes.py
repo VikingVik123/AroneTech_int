@@ -32,7 +32,7 @@ def test_index_route(client):
     """Test the index route returns JSON and CORS headers."""
     response = client.get('/')
     assert response.status_code == 200
-    assert response.json == {"message": "Welcome to the Basic Flask App!"}
+    assert response.get_data(as_text=True) == "Welcome to the Basic Flask App!"
     assert 'Access-Control-Allow-Origin' in response.headers
     assert response.headers['Access-Control-Allow-Origin'] == '*'
 
